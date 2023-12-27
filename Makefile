@@ -30,14 +30,14 @@ Specif.ml String0.ml  ProtocolDefinitions.ml  Protocol.ml
 COQGENERATED := $(COQGENERATEDML) $(COQGENERATEDML:.ml=.mli)
 
 # The list of object files for prog2
-CLIENT_OBJS := helper.cmx $(COQGENERATEDML:.ml=.cmx) protoloop.cmx  tftp_client.cmx
+CLIENT_OBJS := helper.cmx $(COQGENERATEDML:.ml=.cmx) protoloop.cmx  bootp_client.cmx
 
 # The list of object files for prog2
-SERVER_OBJS := helper.cmx $(COQGENERATEDML:.ml=.cmx) protoloop.cmx  tftp_server.cmx
+SERVER_OBJS := helper.cmx $(COQGENERATEDML:.ml=.cmx) protoloop.cmx  bootp_server.cmx
 
 
 
-all: tftp_client tftp_server
+all: bootp_client bootp_server
 
 Protocol.ml: Protocol.vo ProtocolExtraction.v
 	coqc ProtocolExtraction.v
@@ -50,7 +50,7 @@ ProtocolExtraction.vo: ProtocolExtraction.v Protocol.vo
 
 protoloop.cmx: Protocol.cmx protoloop.ml
 
-tftp_client.cmo: protoloop.cmo ProtocolDefinitions.cmo Protocol.cmo tftp_client.ml
+bootp_client.cmo: protoloop.cmo ProtocolDefinitions.cmo Protocol.cmo bootp_client.ml
 
 Protocol.cmx: Protocol.ml Protocol.cmi helper.cmx
 
@@ -58,14 +58,14 @@ Protocol.vo: Protocol.v ProtocolDefinitions.vo Helper.vo
 
 Helper.vo: ProtocolDefinitions.vo
 
-tftp_client.cmx: protoloop.cmx ProtocolDefinitions.cmx Protocol.cmx 
+bootp_client.cmx: protoloop.cmx ProtocolDefinitions.cmx Protocol.cmx 
 
-tftp_client: $(CLIENT_OBJS) protoloop.cmx helper.cmx ProtocolDefinitions.cmx Protocol.cmx
-	$(OCAMLOPT) -o tftp_client $(OCAMLFLAGS) $(OCAMLLIBS) /home/alx/.opam/4.13.1/lib/coq-core/vm/libcoqrun_stubs.a  $(LIBPREFIX)/coq-core/kernel/uint63.cmx  $(CLIENT_OBJS)
+bootp_client: $(CLIENT_OBJS) protoloop.cmx helper.cmx ProtocolDefinitions.cmx Protocol.cmx
+	$(OCAMLOPT) -o bootp_client $(OCAMLFLAGS) $(OCAMLLIBS) /home/alx/.opam/4.13.1/lib/coq-core/vm/libcoqrun_stubs.a  $(LIBPREFIX)/coq-core/kernel/uint63.cmx  $(CLIENT_OBJS)
 
 
-tftp_server: $(SERVER_OBJS) protoloop.cmx helper.cmx ProtocolDefinitions.cmx Protocol.cmx
-	$(OCAMLOPT) -o tftp_server $(OCAMLFLAGS) $(OCAMLLIBS) /home/alx/.opam/4.13.1/lib/coq-core/vm/libcoqrun_stubs.a  $(LIBPREFIX)/coq-core/kernel/uint63.cmx  $(SERVER_OBJS) 
+bootp_server: $(SERVER_OBJS) protoloop.cmx helper.cmx ProtocolDefinitions.cmx Protocol.cmx
+	$(OCAMLOPT) -o bootp_server $(OCAMLFLAGS) $(OCAMLLIBS) /home/alx/.opam/4.13.1/lib/coq-core/vm/libcoqrun_stubs.a  $(LIBPREFIX)/coq-core/kernel/uint63.cmx  $(SERVER_OBJS) 
 
 Protocol.cmi: Protocol.mli ProtocolDefinitions.cmi helper.cmi
 	$(OCAMLC) $(OCAMLFLAGS) -c $<
@@ -105,7 +105,7 @@ recvb: recvb.c
 
 # Clean up
 clean:
-	-rm -f tftp_client tftp_server simple
+	-rm -f bootp_client bootp_server simple
 	-rm -f *.cm[iox]
 	-rm -f *.o
 	-rm -f *.vo[ks]
